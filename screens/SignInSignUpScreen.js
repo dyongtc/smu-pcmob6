@@ -79,6 +79,16 @@ export default function SignInSignUpScreen({ navigation }) {
           onChangeText={(pw) => setPassword(pw)}
         />
       </View>
+      {isLogIn ? <View/> :
+        <View style={styles.inputView}>
+          <TextInput
+            style={styles.textInput}
+            placeholder="Confirm Password:"
+            placeholderTextColor="#003f5c"
+            secureTextEntry={true}
+            onChangeText={(pw) => setConfirmPassword(pw)}
+          />
+        </View>}
       <View />
       <View>
         <View style={{ flexDirection: "row" }}>
@@ -93,6 +103,13 @@ export default function SignInSignUpScreen({ navigation }) {
         </View>
       </View>
       <Text style={styles.errorText}>{errorText}</Text>
+      <TouchableOpacity
+        onPress={() => {
+          setIsLogIn(!isLogIn);
+          setErrorText("");
+        }}>
+          <Text style={styles.switchText}> {isLogIn ? "No account? Sign up now." : "Already have an account? Log in here."}</Text>
+      </TouchableOpacity>
     </View>
   );
 }
