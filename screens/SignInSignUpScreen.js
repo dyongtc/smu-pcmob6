@@ -11,7 +11,7 @@ import {
   Keyboard,
   LayoutAnimation,
 } from "react-native";
-import { API, API_LOGIN } from "../constants/API";
+import { API, API_LOGIN, API_SIGNUP } from "../constants/API";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
@@ -28,6 +28,8 @@ export default function SignInSignUpScreen({ navigation }) {
   const [loading, setLoading] = useState(false);
   const [errorText, setErrorText] = useState("");
   const [isLogIn, setIsLogIn] = useState(true);
+  const [confirmPassword, setConfirmPassword] = useState("");
+  
 
   async function login() {
     console.log("---- Login time ----");
@@ -57,6 +59,34 @@ export default function SignInSignUpScreen({ navigation }) {
     }
   }
 
+  async function signUp() {
+    if (password != confirmPassword) {
+      setErrorText("Your passwords don't match. Check and try again.");
+    } else {
+      try {
+        setLoading(true);
+        const response = await axios.post(API + API_SIGNUP, {
+          username,
+          password,
+        });
+        if (response.data.Error) {
+          // We have an error message for if the user already exists
+          setErrorText(response.data.Error);
+          setLoading(false);
+        } else {
+          console.log("Success signing up!");
+          setLoading(false);
+          login();
+        }
+      } catch (error) {
+        setLoading(false);
+        console.log("Error logging in!");
+        console.log(error.response);
+        setErrorText(error.response.data.description);
+      }
+    }
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{isLogIn ? "Log In" : "Sign Up"}</Text>
@@ -80,7 +110,9 @@ export default function SignInSignUpScreen({ navigation }) {
           onChangeText={(pw) => setPassword(pw)}
         />
       </View>
-      {isLogIn ? <View/> :
+      {isLogIn ? (
+        <View />
+      ) : (
         <View style={styles.inputView}>
           <TextInput
             style={styles.textInput}
@@ -89,11 +121,15 @@ export default function SignInSignUpScreen({ navigation }) {
             secureTextEntry={true}
             onChangeText={(pw) => setConfirmPassword(pw)}
           />
-        </View>}
+        </View>
+      )}
       <View />
       <View>
         <View style={{ flexDirection: "row" }}>
-          <TouchableOpacity style={styles.button} onPress={login}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={isLogIn ? login : signUp}
+          >
             <Text style={styles.buttonText}> Log In </Text>
           </TouchableOpacity>
           {loading ? (
@@ -108,13 +144,19 @@ export default function SignInSignUpScreen({ navigation }) {
         onPress={() => {
           LayoutAnimation.configureNext({
             duration: 700,
-            create: { type: 'linear', property: 'opacity' },
-            update: { type: 'spring', springDamping: 0.4 }
+            create: { type: "linear", property: "opacity" },
+            update: { type: "spring", springDamping: 0.4 },
           });
           setIsLogIn(!isLogIn);
           setErrorText("");
-        }}>
-          <Text style={styles.switchText}> {isLogIn ? "No account? Sign up now." : "Already have an account? Log in here."}</Text>
+        }}
+      >
+        <Text style={styles.switchText}>
+          {" "}
+          {isLogIn
+            ? "No account? Sign up now."
+            : "Already have an account? Log in here."}
+        </Text>
       </TouchableOpacity>
     </View>
   );
