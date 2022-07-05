@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, TextInput, TouchableOpacity } from "react-native";
 import { lightStyles, commonStyles } from "../styles/commonStyles";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { API, API_POSTS, API_CREATE } from "../constants/API";
 
 export default function CreateScreen({ navigation }) {
   const styles = { ...lightStyles, ...commonStyles };
