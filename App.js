@@ -6,15 +6,18 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import SignInSignUpScreen from "./screens/SignInSignUpScreen";
+import { Provider, useSelector } from "react-redux";
+import store from "./redux/configureStore";
 
 const Stack = createStackNavigator();
 
-export default function App() {
+function App() {
+  const token = useSelector((state) => state.auth.token);
+
   const [loading, setLoading] = useState(true);
   const [signedIn, setSignedIn] = useState(false);
 
   async function loadToken() {
-    const token = await AsyncStorage.getItem("token");
     if (token) {
       setSignedIn(true);
     }
@@ -33,8 +36,8 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator
         headerMode="none"
-        // initialRouteName={signedIn ? "Logged In" : "SignInSignUp"}
-        initialRouteName="SignInSignUp"
+        initialRouteName={token ? "Logged In" : "SignInSignUp"}
+        // initialRouteName="SignInSignUp"
         screenOptions={{ 
           animationEnabled:false,
         }}
@@ -45,6 +48,15 @@ export default function App() {
       </Stack.Navigator>
     </NavigationContainer>
   );
+}
+
+export default function AppWrapper() {
+  return (
+    <Provider store={store}>
+      <App />
+    </Provider>
+  );
+  
 }
 
 const styles = StyleSheet.create({
