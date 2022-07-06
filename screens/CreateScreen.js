@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, TextInput, TouchableOpacity } from "react-native";
 import { lightStyles, commonStyles } from "../styles/commonStyles";
 import axios from "axios";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API, API_POSTS, API_CREATE } from "../constants/API";
 
 export default function CreateScreen({ navigation }) {
+  const token = useSelector((state) => state.auth.token);
   const styles = { ...lightStyles, ...commonStyles };
 
   const [title, setTitle] = useState("");
@@ -16,7 +16,6 @@ export default function CreateScreen({ navigation }) {
       title: title,
       content: content,
     };
-    const token = await AsyncStorage.getItem("token");
     try {
       console.log(token);
       const response = await axios.post(API + API_CREATE, post, {

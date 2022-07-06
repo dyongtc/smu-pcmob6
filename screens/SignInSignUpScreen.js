@@ -14,6 +14,8 @@ import {
 import { API, API_LOGIN, API_SIGNUP } from "../constants/API";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { logInAction } from "../redux/ducks/blogAuth";
 
 if (
   Platform.OS === "android" &&
@@ -23,13 +25,13 @@ if (
 } //Needs to be manually enabled for android
 
 export default function SignInSignUpScreen({ navigation }) {
+  const dispatch = useDispatch();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [errorText, setErrorText] = useState("");
   const [isLogIn, setIsLogIn] = useState(true);
   const [confirmPassword, setConfirmPassword] = useState("");
-  
 
   async function login() {
     console.log("---- Login time ----");
@@ -43,7 +45,10 @@ export default function SignInSignUpScreen({ navigation }) {
       });
       console.log("Success logging in!");
       // console.log(response);
-      await AsyncStorage.setItem("token", response.data.access_token);
+      // ...logInAction()
+      // ...{ ...{type: LOG_IN}}
+      // {type:LOG_IN}
+      dispatch({ ...logInAction(), payload: response.data.access_token });
       setLoading(false);
       setUsername("");
       setPassword("");
@@ -130,7 +135,9 @@ export default function SignInSignUpScreen({ navigation }) {
             style={styles.button}
             onPress={isLogIn ? login : signUp}
           >
-            <Text style={styles.buttonText}> Log In </Text>
+            <Text style={styles.buttonText}>
+              {isLogIn ? "Log In" : "Sign Up"}{" "}
+            </Text>
           </TouchableOpacity>
           {loading ? (
             <ActivityIndicator style={{ marginLeft: 10 }} />
