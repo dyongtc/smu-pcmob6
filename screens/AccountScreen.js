@@ -16,6 +16,7 @@ import { commonStyles, darkStyles, lightStyles } from "../styles/commonStyles";
 import { changeModeAction, deletePicAction } from "../redux/ducks/accountPref";
 import { logOutAction } from "../redux/ducks/blogAuth";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import profile from '../assets/user.png';
 
 
 export default function AccountScreen({ navigation }) {
@@ -118,8 +119,11 @@ export default function AccountScreen({ navigation }) {
         {" "}
         Hello {username} !
       </Text>
-      <View style={{ height:profilePicture == null ? 0: 320, justifyContent: "center" }}>
-      {profilePicture == null? <View/> :
+      <View style={{ height:profilePicture == null ? 200 : 320, justifyContent: "center" }}>
+      {profilePicture == null? <Image
+      source={profile}
+      style={{ width: 150, height: 150, borderRadius: 200 }}
+      /> :
         <TouchableWithoutFeedback onPress={changePicSize}>
           <Animated.Image 
           style={{ width: picSize.interpolate(sizeInterpolation), height: picSize.interpolate(sizeInterpolation), borderRadius: 200 }} source={{ uri: profilePicture }} />

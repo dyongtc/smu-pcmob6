@@ -37,7 +37,7 @@ function App() {
     </View>
   ) : (
     <NavigationContainer>
-      <StatusBar style={ isDark ? "light" : "dark" } />
+      <StatusBar style={ isDark ? "dark" : "dark" } />
       <Stack.Navigator
         headerMode="none"
         initialRouteName={token ? "Logged In" : "SignInSignUp"}
