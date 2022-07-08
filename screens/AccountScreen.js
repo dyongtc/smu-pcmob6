@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   View,
   Image,
+  Animated,
 } from "react-native";
 import axios from "axios";
 import { API, API_WHOAMI } from "../constants/API";
@@ -14,6 +15,8 @@ import { commonStyles, darkStyles, lightStyles } from "../styles/commonStyles";
 import { lightModeAction, darkModeAction } from "../redux/ducks/accountPref";
 import { changeModeAction } from "../redux/ducks/accountPref";
 import { logOutAction } from "../redux/ducks/blogAuth";
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+
 
 export default function AccountScreen({ navigation }) {
   const token = useSelector((state) => state.auth.token);
@@ -22,6 +25,11 @@ export default function AccountScreen({ navigation }) {
     (state) => state.accountPrefs.profilePicture
   );
   const dispatch = useDispatch();
+  const picSize = new Animated.Value(0);
+  const sizeInterpolation = {
+    inputRange: [0, 0.5, 1],
+    outputRange: [200, 300, 200]
+  }  
 
   const styles = { ...commonStyles, ...(isDark ? darkStyles : lightStyles) };
   const [username, setUsername] = useState(null);
@@ -59,6 +67,35 @@ export default function AccountScreen({ navigation }) {
     navigation.navigate("SignInSignUp");
   }
 
+  // function changePicSize() {
+  //   //dispatch(isDark ? lightModeAction() : darkModeAction());
+  //   Animated.loop(
+  //     Animated.sequence([
+  //       Animated.spring(picSize, {
+  //         toValue: 300,
+  //         duration: 2500,
+  //         useNativeDriver: false
+  //       }),
+  //       Animated.timing(picSize, {
+  //         toValue: 100,
+  //         duration: 2500,
+  //         useNativeDriver: false
+  //       })
+  //   ]) 
+  //   ).start()
+    
+  // }
+
+  function changePicSize() {
+    Animated.loop(
+      Animated.timing(picSize, {
+        toValue: 1,
+        duration: 2500,
+        useNativeDriver: false
+      }),
+    ).start()
+  }
+
   useEffect(() => {
     console.log("Setting up nav listener");
     // Check for when we come back to this screen
@@ -77,16 +114,23 @@ export default function AccountScreen({ navigation }) {
         {" "}
         Hello {username} !
       </Text>
-      <Image 
-        source={{ uri: profilePicture }}
-        style={{ width: 250, height: 250, borderRadius: 200 }}
-      />
+      {profilePicture == null? <View/> :
+        <TouchableWithoutFeedback onPress={changePicSize}>
+          <Animated.Image 
+          style={{ width: picSize.interpolate(sizeInterpolation), height: picSize.interpolate(sizeInterpolation), borderRadius: 200 }} source={{ uri: profilePicture }} />
+        </TouchableWithoutFeedback>
+        /* <TouchableWithoutFeedback onPress={changePicSize}>
+          <Animated.Image style={{ width: picSize, height: picSize, borderRadius: 200 }}
+                          source={{ uri: profilePicture }} />
+        </TouchableWithoutFeedback> */
+      }
       <TouchableOpacity onPress={() => navigation.navigate("Camera")}>
         <Text style={{ marginTop: 10, fontSize: 20, color: "#0000EE" }}>
-          {" "}
-          No profile picture. Click to take one.{" "}
+          {profilePicture
+          ? "Delete this photo. Take another one."
+          : "No profile picture. Click to take one."} 
         </Text>
-      </TouchableOpacity>
+      </TouchableOpacity> 
       <View
         style={{
           flexDirection: "row",
