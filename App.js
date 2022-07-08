@@ -39,10 +39,10 @@ function App() {
     <NavigationContainer>
       <StatusBar style={ isDark ? "dark" : "dark" } />
       <Stack.Navigator
-        headerMode="none"
         initialRouteName={token ? "Logged In" : "SignInSignUp"}
         // initialRouteName="SignInSignUp"
         screenOptions={{ 
+          headerShown: false,
           animationEnabled:false,
         }}
         

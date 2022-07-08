@@ -17,6 +17,7 @@ import { changeModeAction, deletePicAction } from "../redux/ducks/accountPref";
 import { logOutAction } from "../redux/ducks/blogAuth";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import profile from '../assets/user.png';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 export default function AccountScreen({ navigation }) {
@@ -64,6 +65,7 @@ export default function AccountScreen({ navigation }) {
   }
 
   function signOut() {
+    
     dispatch(logOutAction());
     navigation.navigate("SignInSignUp");
   }

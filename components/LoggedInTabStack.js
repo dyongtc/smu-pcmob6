@@ -12,6 +12,11 @@ export default function LoggedInStack() {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
+        tabBarActiveTintColor: 'tomato',
+        tabBarInactiveTintColor: 'gray',
+        tabBarStyle: {
+          backgroundColor: isDark ? "#181818" : "white", 
+        },
         tabBarIcon: ({ color, size }) => {
           let iconName;
 
@@ -24,13 +29,7 @@ export default function LoggedInStack() {
           return <FontAwesome name={iconName} size={size} color={color} />;
         },
       })}
-      tabBarOptions={{
-        activeTintColor: 'tomato',
-        inactiveTintColor: 'gray',
-        tabStyle: {
-          backgroundColor: isDark ? "#181818" : "white", 
-        }
-      }}>
+      >
         <Tab.Screen name="Blog" component={BlogStack} />
         <Tab.Screen name="Settings" component={AccountStack} />
       </Tab.Navigator>
