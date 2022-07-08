@@ -114,6 +114,7 @@ export default function AccountScreen({ navigation }) {
         {" "}
         Hello {username} !
       </Text>
+      <View style={{ height:profilePicture == null ? 0: 320, justifyContent: "center" }}>
       {profilePicture == null? <View/> :
         <TouchableWithoutFeedback onPress={changePicSize}>
           <Animated.Image 
@@ -124,6 +125,7 @@ export default function AccountScreen({ navigation }) {
                           source={{ uri: profilePicture }} />
         </TouchableWithoutFeedback> */
       }
+      </View>
       <TouchableOpacity onPress={() => navigation.navigate("Camera")}>
         <Text style={{ marginTop: 10, fontSize: 20, color: "#0000EE" }}>
           {profilePicture
