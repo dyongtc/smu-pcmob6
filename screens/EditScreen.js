@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+// import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API, API_POSTS } from "../constants/API";
 import axios from "axios";
 import { useSelector } from "react-redux";
@@ -12,6 +12,7 @@ export default function EditScreen({ navigation, route }) {
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const token = useSelector((state) => state.auth.token);
 
   useEffect(() => {
     const post = route.params.post
@@ -24,7 +25,7 @@ export default function EditScreen({ navigation, route }) {
       "title": title,
       "content": content,
     }
-    const token = await AsyncStorage.getItem("token");
+    // const token = await AsyncStorage.getItem("token");
     const id = route.params.post.id
     try {
       console.log(token);
