@@ -12,8 +12,8 @@ import axios from "axios";
 import { API, API_WHOAMI } from "../constants/API";
 import { useDispatch, useSelector } from "react-redux";
 import { commonStyles, darkStyles, lightStyles } from "../styles/commonStyles";
-import { lightModeAction, darkModeAction } from "../redux/ducks/accountPref";
-import { changeModeAction } from "../redux/ducks/accountPref";
+// import { lightModeAction, darkModeAction } from "../redux/ducks/accountPref";
+import { changeModeAction, deletePicAction } from "../redux/ducks/accountPref";
 import { logOutAction } from "../redux/ducks/blogAuth";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
@@ -96,6 +96,10 @@ export default function AccountScreen({ navigation }) {
     ).start()
   }
 
+  function deletePic(){
+    dispatch(deletePicAction());
+  }
+
   useEffect(() => {
     console.log("Setting up nav listener");
     // Check for when we come back to this screen
@@ -132,7 +136,15 @@ export default function AccountScreen({ navigation }) {
           ? "Delete this photo. Take another one."
           : "No profile picture. Click to take one."} 
         </Text>
-      </TouchableOpacity> 
+      </TouchableOpacity>
+      {profilePicture ? (
+        <View>
+          <TouchableOpacity onPress={deletePic}>
+            <Text style={{ marginTop: 10, fontSize: 20, color: "#0000EE" }}>Delete Profile Picture</Text>
+          </TouchableOpacity>
+        </View>
+      ) : null
+      }
       <View
         style={{
           flexDirection: "row",
